@@ -25,6 +25,13 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
+          title: 'Subscriptions',
+          tabBarIcon: ({ color }) => <TabBarIcon name="check" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="armwrestling"
+        options={{
           title: 'Tab One',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
           headerRight: () => (
@@ -44,12 +51,14 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="app"
         options={{
-          title: 'Tab Two',
+          title: 'To Do',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />
+
+
     </Tabs>
   );
 }

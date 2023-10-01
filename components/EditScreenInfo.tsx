@@ -29,8 +29,10 @@ export default function EditScreenInfo({ path }: { path: string }) {
           style={styles.getStartedText}
           lightColor="rgba(0,0,0,0.8)"
           darkColor="rgba(255,255,255,0.8)">
-          Change any of the text, save the file, and your app will automatically update.
+          Change any of the text, save the file, and your app will automatically update. Wow
         </Text>
+
+        {/* <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.ytimg.com%2Fvi%2F4lyHGnskG9o%2Fmaxresdefault.jpg&f=1&nofb=1&ipt=31a799f8d41d132ea82d6ffeb81423da40bb464271337151c1260ccc47274f1c&ipo=images"></img> */}
       </View>
 
       <View style={styles.helpContainer}>
