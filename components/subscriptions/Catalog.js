@@ -8,55 +8,27 @@ import SubscriptionItem from './SubscriptionItem';
 import AddSubscription from './addSubscription';
 import TotalPerMonth from './totalPerMonth';
 import CatalogItemsInCategory from './CatalogItemsInCategory';
+import getMockItems from '../../constants/MockData'
+import Colors from '../../constants/Colors'
 
 export default function Catalog() {
-    const mockItems = [
-        {
-            name: "netflix",
-            category: "streaming service",
-            logo: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Flogos-world.net%2Fwp-content%2Fuploads%2F2020%2F04%2FNetflix-Emblem.jpg&f=1&nofb=1&ipt=3fe8ed0564d75214729473882415bdec105f470e60bcef4f1a5c1879a64d0acc&ipo=images",
-            price: "45", id: 1
-        },
-        {
-            name: "harel insurance car",
-            category: "insurance",
-            logo: "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.fimi.co.il%2Fimages%2Finvestors-israel%2Fharel.png&f=1&nofb=1&ipt=14cdc7c3771093dcd58500878ee9d88de8945d28c1e40465454eadd9d0ab6efa&ipo=images",
-            price: "100", id: 2
-        },
 
-        {
-            name: "mastercard credit",
-            category: "credit card",
-            logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png",
-            price: "15", id: 3
-        },
-        {
-            name: "american express credit",
-            category: "credit card",
-            logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/American_Express_logo_(2018).svg/1200px-American_Express_logo_(2018).svg.png",
-            price: "0", id: 4
-        }
-    ]
-
-    const unique = (array) => {
-        return array.map(v => v.category)
-            .filter((item, index, arr) => arr.indexOf(item) === index);
-    }
-
-    const categories = unique(mockItems)
-    const categoriesWithIds = categories.map((item, index) =>
-    ({
-        id: (index + 1).toString(),
-        value: item,
-        isExpanded: false
-    }))
-    console.log(categoriesWithIds)
-    // const [isExpanded, setIsExpanded] = useState(true)
+    // const [items, setItems] = useState([])
+    // fetch("http://localhost:8091/subs", { mode: 'no-cors', Headers: [{ ""}] }).then(
+    //     response => {
+    //         console.log(`got ${response}`)
+    //         return response.json()
+    //     }).then(responseJson => {
+    //         console.log(responseJson)
+    //         // this.setItems(responseJson)
+    //     })
+    const runId = Math.ceil(Math.random() * 1000, 1000)
+    const mockItems = getMockItems()
+    const categoriesWithIds = getCategoriesEnumerated(mockItems)
 
     return (
-        <View style={[styles.background, styles.container]}>
-            <Text style={styles.title}>Subscriptions</Text>
-            <TotalPerMonth subscriptionList={mockItems}></TotalPerMonth>
+        <View style={[Colors.background, styles.container]}>
+            <Text style={Colors.title1}>Available Subscriptions</Text>
             <FlatList
                 data={categoriesWithIds}
                 style={styles.maxHeight}
@@ -64,17 +36,22 @@ export default function Catalog() {
                     <View style={styles.categoryBox}>
                         <TouchableOpacity
                             onPress={() => {
-                                item.isExpanded = !item.isExpanded
+                                item.setCategory({
+                                    ...item.category, isExpanded: !item.category.isExpanded
+                                })
                             }}
                             style={styles.toggle}>
-                            <Text style={styles.category}>{item.value}</Text>
+                            <Text style={styles.category}>{item.category.value}</Text>
                         </TouchableOpacity>
                         <ExpandableView
-                            onClickFunction={() => { }}
-                            expanded={item.isExpanded}
-                            category={item.value}
+                            item={item.category}
                             items={mockItems}></ExpandableView>
 
+                        {/* <NormalView
+                            item={item.category}
+                            // expanded={item.isExpanded}
+                            // category={item.value}
+                            items={mockItems}></NormalView> */}
                         {/* <CatalogItemsInCategory
                             category={item.value}
                             items={mockItems}></CatalogItemsInCategory> */}
@@ -86,31 +63,67 @@ export default function Catalog() {
     );
 }
 
-const ExpandableView = ({ onClickFunction, expanded = true, category, items }) => {
-    const [height] = useState(new Animated.Value(0));
+const NormalView = ({ item, items }) => {
+    return (
+        <View style={styles.content}>
+            <CatalogItemsInCategory
+                category={item.value}
+                items={items}></CatalogItemsInCategory>
+        </View>
+    )
+}
 
-    console.log(expanded)
-    useEffect(() => {
-        Animated.timing(height, {
-            toValue: !expanded ? "90%" : 0,
-            duration: 150,
-            useNativeDriver: false
-        }).start();
-    }, [expanded, height]);
+function getCategoriesEnumerated(catalogItems) {
+    const categories = uniqueByField(catalogItems, "category")
 
-    // TODO: why is flatList generating first element of undefined 
-    if (items == undefined)
-        return (<Text>Undefined</Text>)
+    const categoriesWithIds = categories.map((item, index) =>
+    ({
+        id: (index + 1).toString(),
+        value: item,
+        isExpanded: true
+    }))
+
+    const statefulCategories = []
+    for (const i in categoriesWithIds) {
+        if (Object.hasOwnProperty.call(categoriesWithIds, i)) {
+            const [category, setCategory] = useState(categoriesWithIds[i]);
+            statefulCategories.push({ category, setCategory })
+        }
+    }
+
+    return statefulCategories
+}
+
+function uniqueByField(array, field) {
+    return array.map(v => v[field])
+        .filter((item, index, arr) => arr.indexOf(item) === index);
+}
+
+const ExpandableView = ({ item, items }) => {
+    var height = 0
+    if (item.isExpanded) {
+        height = "auto"
+    }
+    else {
+        height = 0
+    }
 
     return (
-        <Animated.View style={{ height }}>
+        <Animated.View style={{ height: height }}>
             <CatalogItemsInCategory
-                category={category}
+                category={item.value}
                 items={items}></CatalogItemsInCategory>
         </Animated.View>
     )
 }
 
+function printItemStates(items, runId) {
+    console.log(`---${runId}---`)
+    for (const i in items) {
+        console.log(`${items[i].category} ${items[i].category.value}: isExpanded [${items[i].category.isExpanded}]`)
+    }
+    console.log("<><><><><>")
+}
 
 const COLOR_TEA_ROSE = "#F8C7CC"
 const COLOR_CAMBRIDGE_BLUE = "#81A684"
@@ -122,15 +135,6 @@ const COLOR_RICH_BLACK = "#0E0F19"
 const styles = StyleSheet.create({
     maxHeight: {
         flexGrow: 0
-    },
-    container: {
-        // height: "80%"
-    },
-    background: {
-        backgroundColor: COLOR_RICH_BLACK,
-    },
-    backgroundWhite: {
-        backgroundColor: "white",
     },
     title: {
         fontSize: 24,
@@ -170,6 +174,10 @@ const styles = StyleSheet.create({
     },
     toggleText: {
         color: "#fff"
+    },
+    content: {
+        // flex: 1,
+        height: "auto"
     }
 })
 

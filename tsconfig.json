@@ -9,6 +9,7 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
     "components/ListItem.js",
-    "components/subscriptions/Catalog.js"
+    "components/subscriptions/Catalog.js",
+    "constants/MockData.js"
   ]
 }

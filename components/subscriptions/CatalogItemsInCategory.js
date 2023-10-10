@@ -1,14 +1,12 @@
 import { Text, View, StyleSheet, FlatList } from 'react-native';
-import SubscriptionItem from './SubscriptionItem';
+import CatalogItem from './CatalogItem';
 
 
 export default function CatalogItemsInCategory({ category, items }) {
-    // console.log(items.filter((item) => { return item.category == category }))
-    // console.log(category);
     return (
         <FlatList
             data={items.filter((item) => { return item.category == category })}
-            renderItem={({ item }) => <SubscriptionItem
+            renderItem={({ item }) => <CatalogItem
                 content={item.name}
                 source={item.logo}
                 price={item.price} />}

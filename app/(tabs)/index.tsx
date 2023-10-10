@@ -6,6 +6,7 @@ import { Text, View } from '../../components/Themed';
 import SubscriptionItem from '../../components/subscriptions/SubscriptionItem';
 import AddSubscription from '../../components/subscriptions/addSubscription';
 import TotalPerMonth from '../../components/subscriptions/totalPerMonth';
+import * as Colors from '../../constants/Colors'
 import { Modal } from 'react-native';
 
 export default function subscriptions() {
@@ -35,15 +36,17 @@ export default function subscriptions() {
 
     return (
         <View>
-            <Text style={styles.title}>Subscriptions</Text>
+            <Text style={[styles.title, Colors.default.title1]}>Subscriptions</Text>
             <TotalPerMonth subscriptionList={mockItems}></TotalPerMonth>
-            <FlatList
-                data={mockItems}
-                renderItem={({ item }) => <SubscriptionItem
-                    content={item.name}
-                    source={item.logo}
-                    price={item.price} />}
-            />
+            <View style={Colors.default.content}>
+                <FlatList
+                    data={mockItems}
+                    renderItem={({ item }) => <SubscriptionItem
+                        content={item.name}
+                        source={item.logo}
+                        price={item.price} />}
+                />
+            </View>
             <AddSubscription></AddSubscription>
         </View>
 
@@ -54,10 +57,10 @@ export default function subscriptions() {
 
 const styles = StyleSheet.create({
     title: {
-        fontSize: 24,
-        fontWeight: "900",
-        marginHorizontal: 24,
-        backgroundColor: "Coral"
+        // fontSize: 24,
+        // fontWeight: "900",
+        // marginHorizontal: 24,
+        // backgroundColor: "Coral"
     },
     item: {
         backgroundColor: "white",
@@ -68,5 +71,11 @@ const styles = StyleSheet.create({
         marginHorizontal: 24,
         marginTop: 10
 
+    },
+    specific: {
+        borderStyle: "solid",
+        borderColor: "#000",
+        borderLeftWidth: 8,
+        borderTopWidth: 3,
     }
 })

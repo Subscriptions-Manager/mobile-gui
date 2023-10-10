@@ -1,4 +1,6 @@
 import { Text, View, StyleSheet, TouchableOpacity, } from 'react-native';
+import * as Colors from '../../constants/Colors'
+
 
 export default function TotalPerMonth({ subscriptionList }) {
     const getTotalCost = () => {
@@ -10,20 +12,15 @@ export default function TotalPerMonth({ subscriptionList }) {
     };
 
     return (
-        <View style={styles.header}>
-            <Text style={styles.text}>Total: {getTotalCost()}₪ per month</Text>
+        <View style={Colors.default.content}>
+            <Text style={Colors.default.contentText}>Total: <Text style={styles.importantText}>{getTotalCost()}₪</Text> per month</Text>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    header: {
-        margin: 28,
+    importantText: {
+        fontWeight: "bold",
 
-    },
-    text: {
-        // fontWeight: "bold",
-        fontSize: 24,
-        color: "white"
     }
 })

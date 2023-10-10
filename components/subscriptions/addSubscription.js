@@ -17,7 +17,6 @@ export default function addSubscription() {
                 onRequestClose={() => setModalVisible(!modalVisible)}>
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={styles.modalTitle}>Hello World!</Text>
                         <Catalog></Catalog>
                         <Pressable
                             onPress={() => setModalVisible(!modalVisible)}
