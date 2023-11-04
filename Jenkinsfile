@@ -19,5 +19,10 @@ pipeline {
                 echo 'Deploying....'
             }
         }
+        stage('Success') {
+          steps {
+            githubNotify description: 'This is a shorted example',  status: 'SUCCESS'
+          }
+        }
     }
 }
